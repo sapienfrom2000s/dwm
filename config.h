@@ -19,7 +19,7 @@ static const char *colors[][3]      = {
 };
 
 static const char *const autostart[] = {
-	"bash", "-c" , "dwm_status", NULL,
+	"bash", "-c" , "slstatus", NULL,
 	NULL /* terminate */
 };
 
