@@ -1,5 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 
+#define  XF86AudioLowerVolume 0x1008ff11
+#define  XF86AudioRaiseVolume 0x1008ff13
+#define  XF86XK_MonBrightnessDown 0x1008ff03
+#define  XF86XK_MonBrightnessUp 0x1008ff02
+
 /* appearance */
 static const unsigned int borderpx  = 5;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -32,8 +37,13 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "firefox",     NULL,       NULL,       1,            0,           -1 },
+	{ "Slack",     "slack",       NULL,       1<<7,            0,           -1 },
+	{ "neovim",     NULL,       NULL,       1<<8,            0,           -1 },
+	{ "vscode",     NULL,       NULL,       1<<8,            0,           -1 },
+	{ "discord",     NULL,       NULL,       1<<7,            0,           -1 },
+	{ "spotify",     NULL,       NULL,       1<<7,            0,           -1 }
+
 };
 
 /* layout(s) */
@@ -63,11 +73,22 @@ static const Layout layouts[] = {
 /* commands */
 static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "qterminal", NULL };
+static const char *up_vol[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+10%",   NULL };
+static const char *down_vol[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-10%",   NULL };
+/*
+static const char *brighter[] = { "brightnessctl", "set", "10%+", NULL };
+static const char *dimmer[]   = { "brightnessctl", "set", "10%-", NULL };
+*/
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+        { 0,                            XF86AudioLowerVolume, spawn, {.v = down_vol } },
+        { 0,                            XF86AudioRaiseVolume, spawn, {.v = up_vol } },
+        /* { 0,                            XF86XK_MonBrightnessDown, spawn, {.v = dimmer } },
+        { 0,                            XF86XK_MonBrightnessUp,   spawn, {.v = brighter } },
+	*/
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
